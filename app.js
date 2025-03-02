@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -16,9 +18,20 @@ connectDB();
 // loading the passport configuration
 require("./config/passport");
 
+// Allow frontend origin
+app.use(
+  cors({
+    origin: process.env.FRONTEND_ORIGIN_URL,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
+
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
 
 // Session setup for production
 const MongoStoreOptions = {
